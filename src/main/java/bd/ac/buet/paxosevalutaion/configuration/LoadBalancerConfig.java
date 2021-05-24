@@ -1,5 +1,6 @@
 package bd.ac.buet.paxosevalutaion.configuration;
 
+import com.google.gson.Gson;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 //import org.springframework.cloud.gateway.route.RouteLocator;
@@ -16,7 +17,12 @@ public class LoadBalancerConfig {
     @Bean
     WebClient.Builder webclientBuilder(){
         return WebClient.builder()
-                .baseUrl("http://keyvaluestore:8080");
+                .baseUrl("http://keyvaluestore");
+    }
+
+    @Bean
+    Gson gson(){
+        return new Gson();
     }
 
 //    @Bean
