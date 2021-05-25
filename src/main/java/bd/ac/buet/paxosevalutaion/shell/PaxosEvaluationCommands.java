@@ -90,6 +90,7 @@ public class PaxosEvaluationCommands {
         paxosController.getTempDataByObjectId(objectId)
                 .subscribe((o)->{
                     List<TempData> tempDataList = o.getTempData();
+                    System.out.println("Response from "+o.getServer());
                     tempDataList.forEach(t->{
                         System.out.println(gson.toJson(t));
                         System.out.println(t.getUpdatedOn().getLong(NANO_OF_SECOND)- t.getCreatedOn().getLong(NANO_OF_SECOND));
