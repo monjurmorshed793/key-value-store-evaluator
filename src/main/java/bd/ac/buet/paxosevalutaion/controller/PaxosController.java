@@ -1,13 +1,13 @@
 package bd.ac.buet.paxosevalutaion.controller;
 
-import bd.ac.buet.paxosevalutaion.dto.ObjectStore;
-import bd.ac.buet.paxosevalutaion.dto.Status;
-import bd.ac.buet.paxosevalutaion.dto.TempData;
-import bd.ac.buet.paxosevalutaion.dto.UserData;
+import bd.ac.buet.paxosevalutaion.dto.*;
+import bd.ac.buet.paxosevalutaion.dto.response.ObjectStoreResponse;
+import bd.ac.buet.paxosevalutaion.dto.response.TempDataListResponse;
 import bd.ac.buet.paxosevalutaion.service.TestDataService;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -52,12 +52,23 @@ public class PaxosController {
     }
 
     @PutMapping("/save")
-    public Mono<ObjectStore> saveData(ObjectStore objectStore){
+    public Mono<ObjectStoreResponse> saveData(ObjectStore objectStore){
         return loadBalancedWebClientBuilder
                 .build()
                 .put()
                 .uri("save")
-                .retrieve().bodyToMono(ObjectStore.class);
+                .body(BodyInserters.fromValue(objectStore))
+                .retrieve().bodyToMono(ObjectStoreResponse.class);
+    }
+
+    @GetMapping("/get/{id}")
+    public Mono<ObjectStoreResponse> getData(@RequestParam("id") String objectId){
+        return loadBalancedWebClientBuilder
+                .build()
+                .get()
+                .uri("id/"+objectId)
+                .retrieve()
+                .bodyToMono(ObjectStoreResponse.class);
     }
 
     @DeleteMapping("/delete-all-temp-data")
@@ -70,30 +81,50 @@ public class PaxosController {
                 .bodyToMono(Void.class);
     }
 
+    @DeleteMapping("/delete-all-object-data")
+    public Mono<Void> deleteAllObjectData(){
+        return loadBalancedWebClientBuilder
+                .build()
+                .delete()
+                .uri("delete-all-object-data")
+                .retrieve()
+                .bodyToMono(Void.class);
+    }
+
+    @GetMapping("/get-all-object-store")
+    public Flux<ObjectStore> getAllObjectStore(){
+        return loadBalancedWebClientBuilder
+                .build()
+                .get()
+                .uri("get-all-object-store")
+                .retrieve()
+                .bodyToFlux(ObjectStore.class);
+    }
+
 
     @GetMapping("/temp-data-all")
-    public Flux<TempData> getAllTempData(){
+    public Mono<TempDataListResponse> getAllTempData(){
         return loadBalancedWebClientBuilder
                 .build()
                 .get()
                 .uri("temp-data-all")
                 .retrieve()
-                .bodyToFlux(TempData.class);
+                .bodyToMono(TempDataListResponse.class);
     }
 
     @GetMapping("/temp-data")
-    public Flux<TempData> getTempDataByObjectId(@RequestParam("object-id") String objectId){
+    public Mono<TempDataListResponse> getTempDataByObjectId(@RequestParam("object-id") String objectId){
         return loadBalancedWebClientBuilder
                 .build()
                 .get()
                 .uri(uriBuilder -> uriBuilder.path("/temp-data")
                 .queryParam("object-id", objectId).build())
                 .retrieve()
-                .bodyToFlux(TempData.class);
+                .bodyToMono(TempDataListResponse.class);
     }
 
     @GetMapping("/temp-data-by-status")
-    public Flux<TempData> getTempDataByObjectIdAndStatus(@RequestParam("object-id") String objectId, @RequestParam("status")Status status){
+    public Mono<TempDataListResponse> getTempDataByObjectIdAndStatus(@RequestParam("object-id") String objectId, @RequestParam("status")Status status){
         return loadBalancedWebClientBuilder
                 .build()
                 .get()
@@ -101,6 +132,16 @@ public class PaxosController {
                 .queryParam("object-id", objectId)
                 .queryParam("status", status).build())
                 .retrieve()
-                .bodyToFlux(TempData.class);
+                .bodyToMono(TempDataListResponse.class);
+    }
+
+    @GetMapping("/server-info")
+    public Flux<ServerInfo> getAllServerInfo(){
+        return loadBalancedWebClientBuilder
+                .build()
+                .get()
+                .uri("server-info")
+                .retrieve()
+                .bodyToFlux(ServerInfo.class);
     }
 }

@@ -1,15 +1,16 @@
 package bd.ac.buet.paxosevalutaion.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
 @Setter
 @Builder
-public class ObjectStore {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ObjectStore implements Serializable {
     private String id;
     private String customObject;
     private Instant createdOn;

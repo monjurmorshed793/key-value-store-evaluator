@@ -8,6 +8,8 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 //import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -17,7 +19,8 @@ public class LoadBalancerConfig {
     @Bean
     WebClient.Builder webclientBuilder(){
         return WebClient.builder()
-                .baseUrl("http://keyvaluestore");
+                .baseUrl("http://keyvaluestore")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
     }
 
     @Bean
