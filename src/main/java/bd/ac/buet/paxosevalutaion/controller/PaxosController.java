@@ -144,4 +144,34 @@ public class PaxosController {
                 .retrieve()
                 .bodyToFlux(ServerInfo.class);
     }
+
+    @GetMapping("/load-all-temp-data")
+    public Flux<TempData> loadAllTempData(){
+        return loadBalancedWebClientBuilder
+                .build()
+                .get()
+                .uri("load-all-temp-data")
+                .retrieve()
+                .bodyToFlux(TempData.class);
+    }
+
+    @GetMapping("/load-all-proposer-store")
+    public Flux<ProposerStore> loadAllProposerStores(){
+        return loadBalancedWebClientBuilder
+                .build()
+                .get()
+                .uri("load-all-proposer-store")
+                .retrieve()
+                .bodyToFlux(ProposerStore.class);
+    }
+
+    @GetMapping("/load-all-detailed-proposer-store")
+    public Flux<DetailedProposerStore> loadAllDetailedProposerStores(){
+        return loadBalancedWebClientBuilder
+                .build()
+                .get()
+                .uri("load-all-detailed-proposer-store")
+                .retrieve()
+                .bodyToFlux(DetailedProposerStore.class);
+    }
 }

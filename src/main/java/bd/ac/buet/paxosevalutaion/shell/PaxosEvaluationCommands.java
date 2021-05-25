@@ -118,4 +118,37 @@ public class PaxosEvaluationCommands {
                     });
                 });
     }
+
+    @ShellMethod("Load all temp data")
+    public void loadAllTempData(){
+        paxosController.loadAllTempData()
+                .collectList()
+                .subscribe((s)->{
+                    s.forEach(t->{
+                        System.out.println(gson.toJson(t));
+                    });
+                });
+    }
+
+    @ShellMethod("Load all proposer stores")
+    public void loadAllProposerStore(){
+        paxosController.loadAllProposerStores()
+                .collectList()
+                .subscribe((s)->{
+                    s.forEach(t->{
+                        System.out.println(gson.toJson(t));
+                    });
+                });
+    }
+
+    @ShellMethod("Load all detailed proposer store")
+    public void loadDetailedProposerStore(){
+        paxosController.loadAllDetailedProposerStores()
+                .collectList()
+                .subscribe((s)->{
+                    s.forEach(t->{
+                        System.out.println(gson.toJson(t));
+                    });
+                });
+    }
 }
