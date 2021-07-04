@@ -71,6 +71,16 @@ public class PaxosController {
                 .bodyToMono(ObjectStoreResponse.class);
     }
 
+    @DeleteMapping("/delete/id/{id}")
+    public Mono<Void> deleteData(@RequestParam("id") String objectId){
+        return loadBalancedWebClientBuilder
+                .build()
+                .delete()
+                .uri("delete/id/"+objectId)
+                .retrieve()
+                .bodyToMono(Void.class);
+    }
+
     @DeleteMapping("/delete-all-temp-data")
     public Mono<Void> deleteAllTempData(){
         return loadBalancedWebClientBuilder
@@ -151,6 +161,17 @@ public class PaxosController {
                 .build()
                 .get()
                 .uri("load-all-temp-data")
+                .retrieve()
+                .bodyToFlux(TempData.class);
+    }
+
+
+    @GetMapping("/load-all-delete-temp-data")
+    public Flux<TempData> loadAllDeleteTempData(){
+        return loadBalancedWebClientBuilder
+                .build()
+                .get()
+                .uri("load-all-delete-temp-data")
                 .retrieve()
                 .bodyToFlux(TempData.class);
     }

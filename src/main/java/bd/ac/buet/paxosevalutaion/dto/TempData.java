@@ -17,6 +17,7 @@ public class TempData {
     private String object;
     private ServerInfo serverInfo;
     private Status status;
+    private StoreType storeType;
     private Instant createdOn;
     private Instant updatedOn;
 }
